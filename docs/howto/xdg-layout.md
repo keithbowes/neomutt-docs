@@ -81,6 +81,8 @@ Expected result: mail data lives in `~/.local/share/mail/`, separate from config
 
 ```sh
 mv ~/.mbsyncrc ~/.config/isyncrc
+mkdir -p ~/.local/state
+mv ~/.mbsync ~/.local/state/isync
 ```
 
 2. Update `~/.config/isyncrc`:
@@ -90,6 +92,8 @@ MaildirStore you@example.com-local
 Path ~/.local/share/mail/you@example.com/
 Inbox ~/.local/share/mail/you@example.com/INBOX
 ```
+
+Expected result: mbsync can synchronize the mail in ~/.local/share/mail.
 
 ## Store notmuch Config in XDG_CONFIG_HOME
 
@@ -111,6 +115,8 @@ path=/home/you/.local/share/mail
 The default profile is called "default". If you use another profile in NeoMutt
 via the `nm_config_profile` variable, you should use that value instead of
 "default" as the directory name.
+
+Expected result: Notmuch correctly searches mail in ~/.local/share/mail.
 
 ## Store msmtp Config in XDG_CONFIG_HOME
 
@@ -172,6 +178,11 @@ Expected result: account-specific settings are isolated in their own files.
         ├── INBOX/
         ├── Sent/
         └── Drafts/
+~/.local/state/
+├── isync/
+    └── :you@example!com-remote:INBOX_:you@example!com-local:INBOX
+    └── :you@example!com-remote:Sent_:you@example!com-local:Sent
+    └── :you@example!com-remote:Drafts_:you@example!com-local:Drafts
 ```
 
 ## What to Back Up
@@ -184,5 +195,6 @@ Expected result: account-specific settings are isolated in their own files.
 | `~/.config/notmuch/`   | Yes      | Search configuration           |
 | `~/.cache/neomutt/`    | No       | Regenerated automatically      |
 | `~/.local/share/mail/` | Optional | Can be re-synced from server   |
+| `~/.local/state/isync/`| Optional | Can be re-synced from server   |
 
 See [Back Up Your Configuration](backup-config) for more on backups and [Writing Your First Configuration](../tutorials/first-config) for config file search order.
